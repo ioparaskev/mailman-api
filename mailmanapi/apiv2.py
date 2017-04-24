@@ -1,4 +1,5 @@
 import os
+import sys
 import uuid
 
 from .utils import parse_boolean, jsonify, get_mailinglist, get_timestamp
@@ -217,6 +218,11 @@ def create_list(listname):
     mail_list = MailList.MailList()
     try:
         mail_list.Create(listname, admin, password)
+        # Now do the MTA-specific list creation tasks
+        if mm_cfg.MTA:
+            modname = 'Mailman.MTA.' + mm_cfg.MTA
+            __import__(modname)
+            sys.modules[modname].create(mail_list)
         mail_list.archive_private = archive_private
         mail_list.subscribe_policy = subscribe_policy
         mail_list.Save()
