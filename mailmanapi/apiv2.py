@@ -88,7 +88,7 @@ def subscribe(listname):
     result = jsonify(ERRORS_CODE['Ok'])
 
     try:
-        mlist.AddMember(userdesc)
+        mlist.ApprovedAddMember(userdesc, admin_notif=False)
     except (Errors.MMSubscribeNeedsConfirmation,
             Errors.MMNeedApproval,
             Errors.MMAlreadyAMember,
